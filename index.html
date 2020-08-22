@@ -454,35 +454,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_methods_for_working_with_sequence_data">Methods for working with sequence data</a>
 <ul class="sectlevel1">
-<li><a href="#_smof">3. smof</a></li>
-<li><a href="#_motif_extraction">4. Motif extraction</a></li>
-<li><a href="#_ha1_extraction">5. HA1 extraction</a></li>
+<li><a href="#_smof_simple_manipulation_of_fasta">3. smof - Simple Manipulation Of Fasta</a></li>
+<li><a href="#_motif_extraction">4. Motif extraction</a>
+<ul class="sectlevel2">
+<li><a href="#_ha1_extraction">4.1. HA1 extraction</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_data_visualization">Data Visualization</a>
 <ul class="sectlevel1">
-<li><a href="#_octoflushow">6. octoflushow</a></li>
+<li><a href="#_octoflushow">5. octoflushow</a></li>
 </ul>
 </li>
 <li><a href="#_clade_inference">Clade inference</a>
 <ul class="sectlevel1">
-<li><a href="#_octoflu">7. octoFLU</a></li>
+<li><a href="#_octoflu">6. octoFLU</a></li>
 </ul>
 </li>
 <li><a href="#_standard_reports">Standard Reports</a>
 <ul class="sectlevel1">
-<li><a href="#_quarterly_report">8. quarterly report</a></li>
+<li><a href="#_quarterly_report">7. quarterly report</a></li>
 </ul>
 </li>
 <li><a href="#_whole_genome_sequencing_monthly_selection">Whole Genome Sequencing monthly selection</a>
 <ul class="sectlevel1">
-<li><a href="#_offlu">9. offlu</a></li>
+<li><a href="#_offlu">8. offlu</a></li>
 </ul>
 </li>
 <li><a href="#_literature">Literature</a>
 <ul class="sectlevel1">
-<li><a href="#_biology_papers">10. Biology papers</a></li>
-<li><a href="#_method_papers">11. Method papers</a></li>
+<li><a href="#_biology_papers">9. Biology papers</a></li>
+<li><a href="#_method_papers">10. Method papers</a></li>
 </ul>
 </li>
 <li><a href="#_glossary">Glossary</a></li>
@@ -517,9 +520,174 @@ Methods for manipulating FASTA files
 </div>
 </div>
 <div class="sect1">
-<h2 id="_smof">3. smof</h2>
+<h2 id="_smof_simple_manipulation_of_fasta">3. smof - Simple Manipulation Of Fasta</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><code>smof</code> is a broad set of CLI tools for working with fasta files. It can be
+installed through <code>pip</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="bash"><span></span>pip install smof</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are on a MacOS, you may need to use <code>pip3</code> instead. <code>smof</code> works on
+Linux, MacOS, and Windows. The only dependency is Python v3.4 or greater.</p>
+</div>
+<div class="paragraph">
+<p>A summary of the tools it includes can be accessed by calling <code>smof -h</code> in the
+terminal.  Here is the usage statement (as of v0.19.0):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>usage: &lt;fastafile&gt; | smof &lt;subcommand&gt; &lt;options&gt;
 
+Tools for studying and manipulating fasta files
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+
+subcommands:
+  [ for help on each: smof &lt;subcommand&gt; -h ]
+    cut                 emulates UNIX cut command, where fields are entries
+    clean               cleans fasta files
+    consensus           finds the consensus sequence for aligned sequence
+    filter              extracts sequences meeting the given conditions
+    grep                roughly emulates the UNIX grep command
+    md5sum              calculate an md5 checksum for the input sequences
+    head                writes the first sequences in a file
+    permute             randomly order sequence
+    reverse             reverse each sequence (or reverse complement)
+    sample              randomly select entries from fasta file
+    sniff               extract info about the sequence
+    sort                sort sequences
+    split               split a fasta file into smaller files
+    stat                calculate sequence statistics
+    subseq              extract subsequence from each entry (revcomp if a&lt;b)
+    tail                writes the last sequences in a file
+    translate           translate a DNA sequence into a protein sequence
+    uniq                count, omit, or merge repeated entries
+    wc                  roughly emulates the UNIX wc command
+
+Project site: https://github.com/incertae-sedis/smof
+Report bugs/requests via https://github.com/incertae-sedis/smof/issues
+Author: Zebulun Arendsee (zbwrnz@gmail.com)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Detailed information about each subcommand can be accessed with <code>smof
+&lt;subcommand&gt; -h</code>, for example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ smof stat -h
+
+usage: &lt;fastafile&gt; | smof stat &lt;options&gt;
+
+The default action is to count the lengths of all sequences and output summary
+statistics including: 1) the number of sequences, 2) the number of characters,
+3) the five-number summary of sequence lengths (minimum, 25th quantile, median,
+75th quantile, and maximum), 4) the mean and standard deviation of lengths, and
+5) the N50 (if you don't know what that is, you don't need to know).
+
+positional arguments:
+  INPUT                 input fasta sequence (default = stdin)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DELIMITER, --delimiter DELIMITER
+                        output delimiter
+  -q, --byseq           write a line for each sequence
+  -I, --case-sensitive  match case
+  -m, --count-lower     count the number of lowercase characters
+  -c, --counts          write counts of all characters
+  -t, --type            guess sequence type
+  -l, --length          write sequence length
+  -p, --proportion      write proportion of each character
+  -C, --aa-profile      display protein profile
+  -g, --hist            write ascii histogram of sequence lengths
+  -G, --log-hist        write ascii histogram of sequence log2 lengths</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For more information on <code>smof</code>, visit the repo at url:[<a href="https://github.com/incertae-sedis/smof" class="bare">https://github.com/incertae-sedis/smof</a>].</p>
+</div>
+<div class="paragraph">
+<p>While <code>smof</code> may have an overwelming number of features, there are just a few
+that you will be likely to use in day-to-day influenza analysis. I will
+introduce just a few below.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>smof stat</code> - I use this all the time to just count the sequences in a
+fasta file and check for oddly-sized entries.</p>
+</li>
+<li>
+<p><code>smof sniff</code> - The output for this one is a bit cryptic (see <code>smof sniff
+-h</code>), but it will tell you if there are repeated sequences, how many of the
+sequences appear to be DNA or protein, whether there are internal stops in a
+protein sequence, and whether any sequences contain illegal characters. It is
+a good idea to run a FASTA file through sniff just to be sure went South in
+your (or someone elses) scripting.</p>
+</li>
+<li>
+<p><code>smof translate -f</code> - Translate the longest coding frame. This works
+perfectly for translating flu segments to proteins. Before using <code>smof</code> for
+this purpose, we had to manually align sequences in Geneious, trim them, and
+then translate them.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>-c</code> - add this flag want the untranslated codon sequence</p>
+</li>
+<li>
+<p><code>-s</code> - add this flag if you want the translation to begin with a START codon</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>smof uniq -f</code> - If any entries have duplicate headers, keep only the
+first. Some programs, such as FastTree, will die if there are any duplicate
+headers. This command is a fast-and-dirty way to remove these duplicates.</p>
+</li>
+<li>
+<p><code>smof uniq -p -z "<em><em>"</code> - Combine entries with identical sequence by
+concatenating the headers. I use '</em></em>' as the header separater since it is
+easy to see and unlikely to appear in a normal header. Often I will grep out
+the combined headers grep '___' myfile.fasta to see what has been combined.
+Then I may either remove the duplicate header info (<code>sed 's/<em>_</em>.*//'</code>) or open
+the fasta in an editor and manually choose what information to include.</p>
+</li>
+<li>
+<p><code>smof clean -ux</code> - Clean up a fasta file, remove any inserted gaps, wrap at
+80 characters, convert to uppercase, remove any Windows carriage returns. For
+DNA sequence, I usually run <code>smof clean -t n -uxdr</code>. The <code>-t n</code> tells <code>smof</code>
+that the sequence is nucleotides, the <code>-d</code> flag will convert 'X' to 'N' and
+irregular gaps ('.' or '_') to regular gaps '-', and the <code>-r</code> command converts
+ambiguous nucleotides to <code>N</code> (don&#8217;t do this if you intend to translate the
+sequence, since <code>smof translate</code> will use ambiguous nucleotides to yield an
+unambiguous amino acid, when possible).</p>
+</li>
+<li>
+<p><code>smof consensus</code> - Create the consensus sequence of an alignment.</p>
+</li>
+<li>
+<p><code>smof grep -P</code> - Extract entries that match a pattern against the header. For
+example, <code>smof grep -P "2020-..-.." myfile.fna</code> will extract entries from the
+year 2020.</p>
+</li>
+<li>
+<p><code>smof grep -q</code> - Extract entries or regions that match a pattern in the
+sequence. There are many, many options for smof sequence grep and I use most
+of them regularly.  For more details, I would recommend you visit the smof
+home page.</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -528,8 +696,7 @@ Methods for manipulating FASTA files
 <div class="paragraph">
 <p>Amino acid motifs are frequently of interest. Examples include the antigenic
 motifs of HA [<a href="#liu2018antigenic">1</a>]. The HA1 and HA2 subunits of the HA gene
-can also be thought of as motifs that we may want to extract from a sequences
-(see the next section).</p>
+can also be thought of as motifs that we may want to extract from a sequences.</p>
 </div>
 <div class="paragraph">
 <p>Motifs may be extracted if we know the motif pattern in a reference gene and
@@ -580,11 +747,8 @@ smof grep -qgoP --gff <span class="tok-nv">$MOTIF</span> flu.faa &gt; flu-motif.
 smof subseq -b <span class="tok-nv">$bounds</span> flu.aln &gt; motif.faa</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_ha1_extraction">5. HA1 extraction</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ha1_extraction">4.1. HA1 extraction</h3>
 <div class="paragraph">
 <p>Publicly available HA segment sequences are inconsistent with regards to what
 part of the gene the include. Some include DNA before the start codon, some
@@ -600,30 +764,31 @@ DNA sequences to the part that codes for HA1.</p>
 </div>
 </div>
 </div>
+</div>
 <h1 id="_data_visualization" class="sect0">Data Visualization</h1>
 <div class="sect1">
-<h2 id="_octoflushow">6. octoflushow</h2>
+<h2 id="_octoflushow">5. octoflushow</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <h1 id="_clade_inference" class="sect0">Clade inference</h1>
 <div class="sect1">
-<h2 id="_octoflu">7. octoFLU</h2>
+<h2 id="_octoflu">6. octoFLU</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <h1 id="_standard_reports" class="sect0">Standard Reports</h1>
 <div class="sect1">
-<h2 id="_quarterly_report">8. quarterly report</h2>
+<h2 id="_quarterly_report">7. quarterly report</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <h1 id="_whole_genome_sequencing_monthly_selection" class="sect0">Whole Genome Sequencing monthly selection</h1>
 <div class="sect1">
-<h2 id="_offlu">9. offlu</h2>
+<h2 id="_offlu">8. offlu</h2>
 <div class="sectionbody">
 
 </div>
@@ -635,13 +800,13 @@ Add important papers and short summaries
 </div>
 </div>
 <div class="sect1">
-<h2 id="_biology_papers">10. Biology papers</h2>
+<h2 id="_biology_papers">9. Biology papers</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_method_papers">11. Method papers</h2>
+<h2 id="_method_papers">10. Method papers</h2>
 <div class="sectionbody">
 
 </div>
