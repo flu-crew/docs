@@ -444,7 +444,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel0">
 <li><a href="#_our_data_and_how_to_manage_it">Our data and how to manage it</a>
 <ul class="sectlevel1">
-<li><a href="#_octofludb">1. octofludb</a></li>
+<li><a href="#_octofludb">1. octofludb</a>
+<ul class="sectlevel2">
+<li><a href="#_deleting_data">1.1. deleting data</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_methods_for_sampling_and_coloring_trees">Methods for sampling and coloring trees</a>
@@ -498,7 +502,75 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_octofludb">1. octofludb</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_deleting_data">1.1. deleting data</h3>
+<div class="paragraph">
+<p>In the August OFFLU report process, we updated the octoFLU reference files to
+better represent the global H3 clades. If we directly upload the new H3 clades
+to octofludb, then we will end up with duplicate records. So we must first
+delete all prior non-USA H3 clades. The SPARQL deletion statement for this is
+shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sparql"><span></span><span class="tok-k">PREFIX</span> <span class="tok-nn">f</span><span class="tok-p">:</span> <span class="tok-nl">&lt;https://flu-crew.org/term/&gt;</span>
 
+<span class="tok-k">DELETE</span> <span class="tok-p">{</span>
+    <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">clade</span> <span class="tok-nv">?clade</span> <span class="tok-p">.</span>
+    <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">gl_clade</span> <span class="tok-nv">?gl_clade</span> <span class="tok-p">.</span>
+<span class="tok-p">}</span>
+<span class="tok-k">WHERE</span> <span class="tok-p">{</span>
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">strain_name</span> <span class="tok-nv">?strain_name</span> <span class="tok-p">.</span>
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">country</span><span class="tok-o">/</span><span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">code</span> <span class="tok-nv">?country</span> <span class="tok-p">.</span>
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">host</span> <span class="tok-s">&quot;swine&quot;</span> <span class="tok-p">.</span>
+
+  <span class="tok-k">FILTER</span> <span class="tok-p">(</span><span class="tok-nv">?country</span> <span class="tok-o">!=</span> <span class="tok-s">&quot;USA&quot;</span><span class="tok-p">)</span> <span class="tok-p">.</span>
+
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">subtype</span> <span class="tok-nv">?subtype</span> <span class="tok-p">.</span>
+  <span class="tok-k">FILTER</span> <span class="tok-nf">REGEX</span><span class="tok-p">(</span><span class="tok-nv">?subtype</span><span class="tok-p">,</span> <span class="tok-s">&quot;H3&quot;</span><span class="tok-p">)</span> <span class="tok-p">.</span>
+
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">has_segment</span> <span class="tok-nv">?gid</span> <span class="tok-p">.</span>
+  <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">segment_name</span> <span class="tok-s">&quot;HA&quot;</span> <span class="tok-p">.</span>
+
+  <span class="tok-k">OPTIONAL</span> <span class="tok-p">{</span> <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">clade</span> <span class="tok-nv">?clade</span> <span class="tok-p">.</span> <span class="tok-p">}</span>
+  <span class="tok-k">OPTIONAL</span> <span class="tok-p">{</span> <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">gl_clade</span> <span class="tok-nv">?gl_clade</span> <span class="tok-p">.</span> <span class="tok-p">}</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The WHERE clause defines a set of triples and the DELETE clause specifies which
+of these triples should be removed.</p>
+</div>
+<div class="paragraph">
+<p>This command should be written to a file (say, <code>delete-global-H3-clades.rq</code>)
+and then can be applied to the local database with the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>octofludb update delete-global-H3-clades.rq</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It is generally good practice to check before we delete. For example, if we
+accidentally added the triple <code>?sid f:has_segment ?gid</code> to the DELETE clause,
+then we would delete the links from strains to segments. An easy way to check
+what will be deleted is to create the corresponding query statement:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sparql"><span></span><span class="tok-k">PREFIX</span> <span class="tok-nn">f</span><span class="tok-p">:</span> <span class="tok-nl">&lt;https://flu-crew.org/term/&gt;</span>
+
+<span class="tok-k">SELECT</span> <span class="tok-o">*</span>
+<span class="tok-k">WHERE</span> <span class="tok-p">{</span>
+   <span class="tok-p">....</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With the WHERE clause being the same as before. The calling <code>octofludb query</code>
+to get a table showing all cases where clade info will be deleted.</p>
+</div>
+</div>
 </div>
 </div>
 <h1 id="_methods_for_sampling_and_coloring_trees" class="sect0">Methods for sampling and coloring trees</h1>
