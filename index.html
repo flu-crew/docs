@@ -444,9 +444,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel0">
 <li><a href="#_our_data_and_how_to_manage_it">Our data and how to manage it</a>
 <ul class="sectlevel1">
-<li><a href="#_octofludb">1. octofludb</a>
+<li><a href="#_the_octoflu_database">1. The OctoFLU Database</a>
 <ul class="sectlevel2">
-<li><a href="#_deleting_data">1.1. deleting data</a></li>
+<li><a href="#_installation">1.1. Installation</a></li>
+<li><a href="#_database_management_with_the_octofludb_utility">1.2. Database management with the <code>octofludb</code> utility</a></li>
+<li><a href="#_getting_data">1.3. Getting data</a></li>
+<li><a href="#_deleting_data">1.4. Deleting data</a>
+<ul class="sectlevel3">
+<li><a href="#_delete_one_link">1.4.1. delete one link</a></li>
+<li><a href="#_delete_many_links">1.4.2. delete many links</a></li>
+</ul>
+</li>
+<li><a href="#_uploading_data">1.5. Uploading data</a></li>
+<li><a href="#_recipes">1.6. recipes</a></li>
 </ul>
 </li>
 </ul>
@@ -500,10 +510,155 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="content">
 <h1 id="_our_data_and_how_to_manage_it" class="sect0">Our data and how to manage it</h1>
 <div class="sect1">
-<h2 id="_octofludb">1. octofludb</h2>
+<h2 id="_the_octoflu_database">1. The OctoFLU Database</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The OctoFLU Database is a platform for storing, curating, and integrating all
+our data.  It is built on the GraphDB database (<a href="http://graphdb.ontotext.com/" class="bare">http://graphdb.ontotext.com/</a>).</p>
+</div>
+<div class="paragraph">
+<p>The database can be accessed either through the graphical user interface or the
+<code>octofludb</code> command line utility. The latter approach is strongly recommended
+and will be the only approach I discuss in the future sections.</p>
+</div>
 <div class="sect2">
-<h3 id="_deleting_data">1.1. deleting data</h3>
+<h3 id="_installation">1.1. Installation</h3>
+<div class="paragraph">
+<p>The free version of GraphDB can be downloaded and installed from the website.</p>
+</div>
+<div class="paragraph">
+<p><code>octofludb</code> can be installed through pip:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>pip install octofludb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You may need to replace <code>pip</code> with <code>pip3</code>, depending on your setup.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_database_management_with_the_octofludb_utility">1.2. Database management with the <code>octofludb</code> utility</h3>
+<div class="paragraph">
+<p>Documentation for all subcommands in <code>octofludb</code> can be accessed by calling
+<code>octofludb -h</code>.  Subcommand documentation can be accessed with <code>octofludb
+&lt;subcommand&gt; -h</code>.</p>
+</div>
+<div class="paragraph">
+<p>Once GraphDB is installed on your system, you can initialize an empty repo with
+<code>octofludb init</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_getting_data">1.3. Getting data</h3>
+<div class="paragraph">
+<p>A local database can be accessed by submitting SPARQL queries. A SPARQL script
+specifies a pattern over a graph and when given to the database will print a
+row of data for every occurrence of the pattern.</p>
+</div>
+<div class="paragraph">
+<p>Below is a very simple script that returns the strain names of every gamma:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sparql"><span></span><span class="tok-k">PREFIX</span> <span class="tok-nn">f</span><span class="tok-p">:</span> <span class="tok-nl">&lt;https://flu-crew.org/term/&gt;</span>
+
+<span class="tok-k">SELECT</span> <span class="tok-nv">?name</span>
+<span class="tok-k">WHERE</span> <span class="tok-p">{</span>
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">strain_name</span> <span class="tok-nv">?name</span> <span class="tok-p">.</span>
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">host</span> <span class="tok-s">&quot;swine&quot;</span> <span class="tok-p">.</span>
+  <span class="tok-nv">?sid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">has_segment</span> <span class="tok-nv">?gid</span> <span class="tok-p">.</span>
+  <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">clade</span> <span class="tok-s">&quot;gamma&quot;</span> <span class="tok-p">.</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The PREFIX line defines an abbreviatin, <code>f</code>, for the long URI
+<code><a href="https://flu-crew.org/term/" class="bare">https://flu-crew.org/term/</a></code>. While the URI looks like a web link, it does not
+need to point to a real web page (although it may, and that is a good place to
+put documentation). Every edge type defined specifically for OctofluDB has this
+prefix.</p>
+</div>
+<div class="paragraph">
+<p>The SELECT term is followed by a list of all the columns we want printed out
+for us, in this case just one.</p>
+</div>
+<div class="paragraph">
+<p><code>?sid f:strain_name ?name .</code> is a graph pattern restricting the returned data
+to things related to eachother by the <code>f:strain_name</code> predicate. Words that
+begin with <code>?</code> are variables. There is nothing special about <code>?sid</code> and
+<code>?name</code>, these variables could be named anything. By convention, I normally use
+<code>?sid</code> for a *s*train *id*entifier and <code>?gid</code> for a *g*enbank *id*enditifer.
+Every statement must end with a <code>.</code>, otherwise GraphDB will spill out a very
+ugly error statement.</p>
+</div>
+<div class="paragraph">
+<p><code>?sid f:has_segment ?gid .</code> links our strain node to its child segment node.
+This particular link will appear in many queries.</p>
+</div>
+<div class="paragraph">
+<p><code>?gid f:clade "gamma"</code> links the segment to the literal string value "gamma" by the <code>f:clade</code> relation.</p>
+</div>
+<div class="paragraph">
+<p>The query can be sent to the database with the command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>octofludb query fetch-gammas.rq</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The extension <code>.rq</code> is convention for SPARQL scripts.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deleting_data">1.4. Deleting data</h3>
+<div class="paragraph">
+<p>I will describe how to delete data with a few examples.</p>
+</div>
+<div class="sect3">
+<h4 id="_delete_one_link">1.4.1. delete one link</h4>
+<div class="paragraph">
+<p>To understand the need for deleting data, you should know a little about how
+graph databases handle conflicting data. Data uploaded to GraphDB consists of
+many "triples", where a triple consists of a subject, a predicate
+(relationship), and an object. That is, a triple specifies a single edge in the
+graph.</p>
+</div>
+<div class="paragraph">
+<p>For example, suppose we have an edge in the database linking the HA segment
+EPI_123456 to the clade "gamma". Then suppose we want to instead link it to the
+more specific clade "gamma.3". If we upload the new triple, however, the
+original link "gamma" is not removed, instead we end up with the segment being
+linked to both "gamma" and "gamma.3". The database doesn&#8217;t magically know that
+the relation "clade" should always be one-to-one. So if we want only the clade
+"gamma.3", we will need to delete the original clade.</p>
+</div>
+<div class="paragraph">
+<p>The following SPARQL command will do what we want:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="sparql"><span></span><span class="tok-k">PREFIX</span> <span class="tok-nn">f</span><span class="tok-p">:</span> <span class="tok-nl">&lt;https://flu-crew.org/term/&gt;</span>
+
+<span class="tok-k">DELETE</span> <span class="tok-p">{</span>
+    <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">epi_id</span> <span class="tok-s">&quot;EPI_123456&quot;</span> <span class="tok-p">.</span>
+    <span class="tok-nv">?gid</span> <span class="tok-nn">f</span><span class="tok-p">:</span><span class="tok-nt">clade</span> <span class="tok-s">&quot;gamma&quot;</span> <span class="tok-p">.</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This deletion script can be written to a file, <code>delete-clade.rq</code>, and executed
+on the local database with <code>octofludb update delete-clade.rq</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_delete_many_links">1.4.2. delete many links</h4>
+<div class="paragraph">
+<p>This example expands on the prior example and introduces a more powerful
+technique for deleting data.</p>
+</div>
 <div class="paragraph">
 <p>In the August OFFLU report process, we updated the octoFLU reference files to
 better represent the global H3 clades. If we directly upload the new H3 clades
@@ -569,6 +724,42 @@ what will be deleted is to create the corresponding query statement:</p>
 <div class="paragraph">
 <p>With the WHERE clause being the same as before. The calling <code>octofludb query</code>
 to get a table showing all cases where clade info will be deleted.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uploading_data">1.5. Uploading data</h3>
+<div class="paragraph">
+<p>There are three basic steps to uploading data to the database.</p>
+</div>
+<div class="paragraph">
+<p>The first is to prepare the raw data in the "proper" way.</p>
+</div>
+<div class="paragraph">
+<p>The second step is to convert the raw data to the turtle-format GraphDB
+understands. This is done through the <code>mk_*</code> commands in <code>octofludb</code>. These
+commands do more than just translate the data, they use specialized parsers to
+extract flu specific information from the data. For example, if</p>
+</div>
+<div class="paragraph">
+<p>The third step is to upload the turtle files to the database. If you are
+working with a local database, this step is easy: <code>octofludb upload
+&lt;turtle-fiels&gt;</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_recipes">1.6. recipes</h3>
+<div class="paragraph">
+<p>Recipe functions are data synthesis functions that are built into <code>octofludb</code>.
+They will be added on an as-needed database.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>masterlist</code> - generate a table of data describing all A0 strains. This is
+the base table used by <code>octoflushow</code> and to generate quarterly reports.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -902,7 +1093,7 @@ Add important papers and short summaries
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-22 15:34:44 -0500
+Last updated 2020-08-24 19:00:48 -0500
 </div>
 </div>
 <style>
