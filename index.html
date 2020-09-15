@@ -469,37 +469,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_methods_for_working_with_sequence_data">Methods for working with sequence data</a>
 <ul class="sectlevel1">
 <li><a href="#_smof_simple_manipulation_of_fasta">3. smof - Simple Manipulation Of Fasta</a></li>
-<li><a href="#_motif_extraction">4. Motif extraction</a>
+<li><a href="#_motif_extraction">4. Motif extraction</a></li>
+<li><a href="#_flutile_specialized_tools_for_influenza">5. <code>flutile</code> - specialized tools for influenza</a>
 <ul class="sectlevel2">
-<li><a href="#_ha1_extraction">4.1. HA1 extraction</a></li>
+<li><a href="#_ha1_extraction">5.1. HA1 extraction</a></li>
+<li><a href="#_flutile_and_aadiff_table_generation">5.2. <code>flutile</code> and aadiff table generation</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#_data_visualization">Data Visualization</a>
 <ul class="sectlevel1">
-<li><a href="#_octoflushow">5. octoflushow</a></li>
+<li><a href="#_octoflushow">6. octoflushow</a></li>
 </ul>
 </li>
 <li><a href="#_clade_inference">Clade inference</a>
 <ul class="sectlevel1">
-<li><a href="#_octoflu">6. octoFLU</a></li>
+<li><a href="#_octoflu">7. octoFLU</a></li>
 </ul>
 </li>
 <li><a href="#_standard_reports">Standard Reports</a>
 <ul class="sectlevel1">
-<li><a href="#_quarterly_report">7. quarterly report</a></li>
+<li><a href="#_quarterly_report">8. quarterly report</a></li>
 </ul>
 </li>
 <li><a href="#_whole_genome_sequencing_monthly_selection">Whole Genome Sequencing monthly selection</a>
 <ul class="sectlevel1">
-<li><a href="#_offlu">8. offlu</a></li>
+<li><a href="#_offlu">9. offlu</a></li>
 </ul>
 </li>
 <li><a href="#_literature">Literature</a>
 <ul class="sectlevel1">
-<li><a href="#_biology_papers">9. Biology papers</a></li>
-<li><a href="#_method_papers">10. Method papers</a></li>
+<li><a href="#_biology_papers">10. Biology papers</a></li>
+<li><a href="#_method_papers">11. Method papers</a></li>
 </ul>
 </li>
 <li><a href="#_glossary">Glossary</a></li>
@@ -1010,8 +1012,17 @@ smof grep -qgoP --gff <span class="tok-nv">$MOTIF</span> flu.faa &gt; flu-motif.
 smof subseq -b <span class="tok-nv">$bounds</span> flu.aln &gt; motif.faa</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_flutile_specialized_tools_for_influenza">5. <code>flutile</code> - specialized tools for influenza</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><code>flutile</code> is a python package and command line utility that, like <code>smof</code>, can
+be installed through pip: <code>pip install flutile</code> (maybe use <code>pip3</code> on MacOS).</p>
+</div>
 <div class="sect2">
-<h3 id="_ha1_extraction">4.1. HA1 extraction</h3>
+<h3 id="_ha1_extraction">5.1. HA1 extraction</h3>
 <div class="paragraph">
 <p>Publicly available HA segment sequences are inconsistent with regards to what
 part of the gene the include. Some include DNA before the start codon, some
@@ -1019,39 +1030,314 @@ begin at the start codon, some begin after the start codon. This variety
 introduces non-biological noise into phylogenetic studies. Furthermore, the HA
 protein is processed after translation to remove the initial signal peptide and
 to cut the protein into two subunits, HA1 and HA2. For phylogenetic work, we
-usually focus on HA1.</p>
+usually focus on HA1. For more consistent phylogenetic results, it is good
+practice to trim the HA DNA sequences to the part that codes for HA1.</p>
 </div>
 <div class="paragraph">
-<p>For more consistent phylogenetic results, it is good practice to trim the HA
-DNA sequences to the part that codes for HA1.</p>
+<p><code>flutile trim</code> can extract HA1 regions for H1 and H3 sequences (handling for
+the other HA subtypes could be easily added given a reference strain and
+motifs). <code>flutile</code> finds the HA1 by aligning the input sequences against the
+reference sequence (California/07/2009) and then extracting from the alignment
+the regions that map to the reference HA1. This will correctly find HA1 regions
+even if they are truncated. Here are a few examples:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># DNA input to AA HA1
+flutile trim h1-ha1 --conversion=dna2aa myfile.fna
+# DNA input to DNA output
+flutile trim h1-ha1 --conversion=dna2dna myfile.fna
+# AA input to AA output
+flutile trim h1-ha1 --conversion=aa2dna myfile.faa</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For tree building, the <code>--conversion=dna2dna</code> option is strongly recommended.</p>
+</div>
+<div class="paragraph">
+<p>To build a gamma tree from the octoFLU reference file, for example, we might use the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>cat reference.fa |  # open the reference file
+  smof grep 1A.3.3.3 |  # extract the strains with a gamma HA
+  smof grep "|H1|" |  # extract the H1's
+  flutile trim h1-ha1 --conversion=dna2dna |  # trim to HA1 region
+  mafft /dev/stdin |  # realign the DNA
+  FastTree -nt -gtr -gamma &gt; gamma.tre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The realignment is needed since the alignment <code>flutile</code> makes internally is of
+translated inputs against the protein reference.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_flutile_and_aadiff_table_generation">5.2. <code>flutile</code> and aadiff table generation</h3>
+<div class="paragraph">
+<p><code>flutile aadiff</code> takes a multiple-sequence alignment as an input and creates a
+character difference table. This command is designed for preparing amino acid
+difference tables. Below is an example of a comparison of 4 H1 sequences.</p>
+</div>
+<div class="paragraph">
+<p><code>flutile aadiff --subtype=H1 mufile.faa</code></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. <code>flutile aadiff</code> output</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">site</th>
+<th class="tableblock halign-left valign-top">A02479030</th>
+<th class="tableblock halign-left valign-top">SD0246</th>
+<th class="tableblock halign-left valign-top">SD0272</th>
+<th class="tableblock halign-left valign-top">SD0136</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">T</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">T</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">154</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">K</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">154+1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">154+2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">155</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">156</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">D</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">G</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The <code>--subtype=H1</code> argument tells <code>flutile</code> to align the inputs against an H1
+reference (A/United Kingdom/1/1933). The reference is used to determine
+relative indices (the <code>sites</code> column). The index reference is used only for
+indexing and does not appear in the final table. The first three rows (sites
+-3, -2, -1) align to the three residues at the end of the signal peptide. Site
+1 is the first residue in the mature peptide. Any gaps in the reference
+alignment are indexed as <code>&lt;ref_id&gt;+&lt;offset&gt;</code>, for example 154+1 and 154+2 are
+positions 1 and 2 residues after the reference position 154. <code>flutile</code> uses the
+references from [<a href="#burke2014">2</a>] (summarized in table below).</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Subtype references, adapted from [<a href="#burke2014">2</a>]</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">subtype</th>
+<th class="tableblock halign-left valign-top">strain name</th>
+<th class="tableblock halign-left valign-top">signal peptide</th>
+<th class="tableblock halign-left valign-top">mature peptide start</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/United Kingdom/1/1933</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MKARLLVLLCALAATDA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DTICIGYHANNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/Singapore/1/1957</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MAIIYLILLFTAVRG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DQICIGYHANNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/Aichi/2/1968</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MKTIIALSYIFCLPLG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QDLPGNDNSTATLCLGHHAVPN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/swine/Ontario/01911–2/1999</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MLSIAILFLLIAEGSS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QNYTGNPVICLGHHAVSN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/Vietnam/1203/2004</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEKIVLLFAIVSLVKS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DQICIGYHANNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/chicken/Taiwan/0705/1999</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MIAIIVIATLAAAGKS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DKICIGYHANNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/Netherlands/219/2003</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MNTQILVFALVASIPTNA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DKICLGHHAVSN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/turkey/Ontario/6118/1968</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEKFIAIAMLLASTNA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YDRICIGYQSNNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/swine/Hong Kong/9/1998</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEAASLITILLVVTASNA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DKICIGYQSTNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/mallard/bavaria/3/2006</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MYKIVVIIALLGAVKG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LDKICLGHHAVAN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/duck/England/1/1956</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEKTLLFAAIFLCVKA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DEICIGYLSNNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/duck/Alberta/60/1976</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MEKFIILSTVLAASFA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">YDKICIGYQTNNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H13</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/gull/Maryland/704/1977</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MALNVIATLTLISVCVHA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DRICVGYLSTNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H14</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/mallard/Astrakhan/263/1982</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MIALILVALALSHTAYS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QITNGTTGNPIICLGHHAVEN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/duck/Australia/341/1983</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MNTQIIVILVLGLSMVRS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DKICLGHHAVAN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H16</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/black-headed-gull/Turkmenistan/13/1976</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MMIKVLYFLIIVLGRYSKA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DKICIGYLSNNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H17</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/little-yellow-shouldered bat/Guatemala/060/2010</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MELIILLILLNPYTFVLG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DRICIGYQANQN</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H18</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A/flat-faced bat/Peru/033/2010</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MITILILVLPIVVG</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DQICIGYHSNNS</p></td>
+</tr>
+</tbody>
+</table>
+<div class="ulist">
+<ul>
+<li>
+<p>The H3 signal peptide appears to actually be <code>MKTIIALSYIFCLALG</code></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <h1 id="_data_visualization" class="sect0">Data Visualization</h1>
 <div class="sect1">
-<h2 id="_octoflushow">5. octoflushow</h2>
+<h2 id="_octoflushow">6. octoflushow</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <h1 id="_clade_inference" class="sect0">Clade inference</h1>
 <div class="sect1">
-<h2 id="_octoflu">6. octoFLU</h2>
+<h2 id="_octoflu">7. octoFLU</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <h1 id="_standard_reports" class="sect0">Standard Reports</h1>
 <div class="sect1">
-<h2 id="_quarterly_report">7. quarterly report</h2>
+<h2 id="_quarterly_report">8. quarterly report</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <h1 id="_whole_genome_sequencing_monthly_selection" class="sect0">Whole Genome Sequencing monthly selection</h1>
 <div class="sect1">
-<h2 id="_offlu">8. offlu</h2>
+<h2 id="_offlu">9. offlu</h2>
 <div class="sectionbody">
 
 </div>
@@ -1063,13 +1349,13 @@ Add important papers and short summaries
 </div>
 </div>
 <div class="sect1">
-<h2 id="_biology_papers">9. Biology papers</h2>
+<h2 id="_biology_papers">10. Biology papers</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_method_papers">10. Method papers</h2>
+<h2 id="_method_papers">11. Method papers</h2>
 <div class="sectionbody">
 
 </div>
@@ -1087,6 +1373,9 @@ Add important papers and short summaries
 <div class="sectionbody">
 <div class="paragraph">
 <p><a id="liu2018antigenic"></a>[1] S. T. H. Liu, M. A. Behzadi, W. Sun, A. W. Freyn, W.-C. Liu, F. Broecker, R. A. Albrecht, N. M. Bouvier, V. Simon, R. Nachbagauer, &amp; others, Antigenic sites in influenza H1 hemagglutinin display species-specific immunodominance. <em>The Journal of clinical investigation</em>, <strong>128</strong> (2018) 4992–4996.</p>
+</div>
+<div class="paragraph">
+<p><a id="burke2014"></a>[2] D. F. Burke &amp; D. J. Smith, A recommended numbering scheme for influenza A HA subtypes. <em>PloS one</em>, <strong>9</strong> (2014) e112302.</p>
 </div>
 </div>
 </div>
