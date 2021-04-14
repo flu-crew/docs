@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="generator" content="Asciidoctor 2.0.12">
 <title>Flu-crew Technical Documentation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -47,7 +47,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 *,*::before,*::after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
 html,body{font-size:100%}
-body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
 a:hover{cursor:pointer}
 img,object,embed{max-width:100%;height:auto}
 object,embed{height:100%}
@@ -62,10 +62,8 @@ img{-ms-interpolation-mode:bicubic}
 img,object,svg{display:inline-block;vertical-align:middle}
 textarea{height:auto;min-height:50px}
 select{width:100%}
-.center{margin-left:auto;margin-right:auto}
-.stretch{width:100%}
 .subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
-div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
 a{color:#2156a5;text-decoration:underline;line-height:inherit}
 a:hover,a:focus{color:#1d4b8f}
 a img{border:0}
@@ -105,19 +103,22 @@ h1{font-size:2.75em}
 h2{font-size:2.3125em}
 h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
 h4{font-size:1.4375em}}
-table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede;word-wrap:normal}
 table thead,table tfoot{background:#f7f8f7}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
 table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
 table tr.even,table tr.alt{background:#f8f8f7}
-table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
 h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
 h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
 .clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
 .clearfix::after,.float-group::after{clear:both}
-:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
-:not(pre)>code.nobreak{word-wrap:normal}
-:not(pre)>code.nowrap{white-space:nowrap}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
 pre>code{display:block}
@@ -182,7 +183,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
 #content #toc>:first-child{margin-top:0}
 #content #toc>:last-child{margin-bottom:0}
-#footer{max-width:100%;background:rgba(0,0,0,.8);padding:1.25em}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
 #footer-text{color:rgba(255,255,255,.8);line-height:1.44}
 #content{margin-bottom:.625em}
 .sect1{padding-bottom:.625em}
@@ -205,7 +206,7 @@ table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font
 .admonitionblock>table td.icon{text-align:center;width:80px}
 .admonitionblock>table td.icon img{max-width:none}
 .admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
-.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
 .exampleblock>.content>:first-child{margin-top:0}
@@ -215,7 +216,7 @@ table.tableblock #preamble>.sectionbody>[class="paragraph"]:first-of-type p{font
 .sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
 .exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
-.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;overflow-x:auto;padding:1em;font-size:.8125em}
+.literalblock pre,.listingblock>.content>pre{-webkit-border-radius:4px;border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
 .literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class="highlight"],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
@@ -261,21 +262,20 @@ pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
 .quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
 .quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;text-align:left;margin-right:0}
-table.tableblock{max-width:100%;border-collapse:separate}
 p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
 td.tableblock>.content>:last-child{margin-bottom:-1.25em}
-td.tableblock>.content>:last-child.sidebarblock{margin-bottom:0}
 table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
-table.grid-all>thead>tr>.tableblock,table.grid-all>tbody>tr>.tableblock{border-width:0 1px 1px 0}
-table.grid-all>tfoot>tr>.tableblock{border-width:1px 1px 0 0}
-table.grid-cols>*>tr>.tableblock{border-width:0 1px 0 0}
-table.grid-rows>thead>tr>.tableblock,table.grid-rows>tbody>tr>.tableblock{border-width:0 0 1px}
-table.grid-rows>tfoot>tr>.tableblock{border-width:1px 0 0}
-table.grid-all>*>tr>.tableblock:last-child,table.grid-cols>*>tr>.tableblock:last-child{border-right-width:0}
-table.grid-all>tbody>tr:last-child>.tableblock,table.grid-all>thead:last-child>tr>.tableblock,table.grid-rows>tbody>tr:last-child>.tableblock,table.grid-rows>thead:last-child>tr>.tableblock{border-bottom-width:0}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
 table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
 table.frame-sides{border-width:0 1px}
-table.frame-topbot,table.frame-ends{border-width:1px 0}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
 table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
@@ -284,7 +284,7 @@ th.valign-top,td.valign-top{vertical-align:top}
 th.valign-bottom,td.valign-bottom{vertical-align:bottom}
 th.valign-middle,td.valign-middle{vertical-align:middle}
 table thead th,table tfoot th{font-weight:bold}
-tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th{background:#f7f8f7}
 tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
 p.tableblock>code:only-child{background:none;padding:0}
 p.tableblock{font-size:1em}
@@ -313,6 +313,7 @@ ol.lowergreek{list-style-type:lower-greek}
 .hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
 td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
 td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
 .literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
 .colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
 .colist td:not([class]):first-child img{max-width:none}
@@ -385,7 +386,7 @@ a span.icon>.fa{cursor:inherit}
 .admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
 .admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
 .admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
-.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);-webkit-border-radius:50%;border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
 .conum[data-value] *{color:#fff!important}
 .conum[data-value]+b{display:none}
 .conum[data-value]::after{content:attr(data-value)}
@@ -412,6 +413,7 @@ thead{display:table-header-group}
 svg{max-width:100%}
 p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
 h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
 #toc,.sidebarblock,.exampleblock>.content{background:none!important}
 #toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
 body.book #header{text-align:center}
@@ -434,6 +436,82 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer{background:none}
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<style>
+pre { line-height: 125%; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #f8f8f8; }
+pre.pygments .tok-c { color: #008800; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #AA22FF; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #008800; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #008800; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #008800 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #008800; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #008800; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #008800; font-weight: bold } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #888888 } /* Generic.Output */
+pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #AA22FF; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #AA22FF; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #AA22FF; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #AA22FF } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #AA22FF; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #00BB00; font-weight: bold } /* Keyword.Type */
+pre.pygments .tok-m { color: #666666 } /* Literal.Number */
+pre.pygments .tok-s { color: #BB4444 } /* Literal.String */
+pre.pygments .tok-na { color: #BB4444 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #AA22FF } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0000FF } /* Name.Class */
+pre.pygments .tok-no { color: #880000 } /* Name.Constant */
+pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
+pre.pygments .tok-ni { color: #999999; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+pre.pygments .tok-nf { color: #00A000 } /* Name.Function */
+pre.pygments .tok-nl { color: #A0A000 } /* Name.Label */
+pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #B8860B } /* Name.Variable */
+pre.pygments .tok-ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #666666 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #666666 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #666666 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #666666 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #666666 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #BB4444 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #BB4444 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #BB4444 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #BB4444 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #BB4444; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #BB4444 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #BB4444 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #BB6688 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #BB4444 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #B8860B } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #AA22FF } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #00A000 } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #B8860B } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #B8860B } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #B8860B } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #B8860B } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 </style>
 </head>
 <body class="book toc2 toc-left">
@@ -463,7 +541,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_methods_for_sampling_and_coloring_trees">Methods for sampling and coloring trees</a>
 <ul class="sectlevel1">
-<li><a href="#_smot">2. smot</a></li>
+<li><a href="#_methods_for_manipulating_trees">2. Methods for manipulating trees</a>
+<ul class="sectlevel2">
+<li><a href="#_pandemic_h1_filtering_down_a_giant_clade">2.1. Pandemic H1 - filtering down a giant clade</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_methods_for_working_with_sequence_data">Methods for working with sequence data</a>
@@ -474,6 +556,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_ha1_extraction">5.1. HA1 extraction</a></li>
 <li><a href="#_flutile_and_aadiff_table_generation">5.2. <code>flutile</code> and aadiff table generation</a></li>
+<li><a href="#_flutile_and_indexing">5.3. <code>flutile</code> and indexing</a></li>
+<li><a href="#_flutile_and_motif_extraction">5.4. <code>flutile</code> and motif extraction</a></li>
 </ul>
 </li>
 </ul>
@@ -767,15 +851,117 @@ the base table used by <code>octoflushow</code> and to generate quarterly report
 </div>
 </div>
 <h1 id="_methods_for_sampling_and_coloring_trees" class="sect0">Methods for sampling and coloring trees</h1>
-<div class="openblock partintro">
-<div class="content">
-Methods for manipulating trees
-</div>
-</div>
 <div class="sect1">
-<h2 id="_smot">2. smot</h2>
+<h2 id="_methods_for_manipulating_trees">2. Methods for manipulating trees</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>I will describe methods here through a series of examples.</p>
+</div>
+<div class="sect2">
+<h3 id="_pandemic_h1_filtering_down_a_giant_clade">2.1. Pandemic H1 - filtering down a giant clade</h3>
+<div class="paragraph">
+<p>You have just retrieved H1 pandemic sequence from the last few years and want
+to do something awesome with it. With <code>smof</code>, you can see how many sequences
+you have:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ smof stat pdm.fna
+nseq:      26802
+nchars:    26257059
+5sum:      1 982 982 982 991
+mean(sd):  980 (29)
+N50:       982</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Oh crap, one of our sequences has a length of 1.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ smof filter -s 100 pdm.fna
+&gt;|A/Jacarei/1495954-IAL/2020|H1N1|human|BRA|||2020-02-29
+a
+&gt;|A/Presidente_Venceslau/1261099-IAL/2019|H1N1|human|BRA|||2019-08-13
+a
+&gt;|A/Goiania/1435-IAL/2019|H1N1|human|BRA|||2019-09-07
+c
+&gt;|A/Sao_Paulo/167/2016|H1N1|human|BRA|||2016-01-04
+g
+&gt;|A/Sao_Paulo/725017/2018|H1N1|human|BRA|||2018-02-27
+g</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The HAs were trimmed to the HA1 region, so these sequences are simply truncated
+sequences. We can either filter them out or change our methods to not trim.
+I&#8217;ll go with the third option of leaving them in and building the tree (since
+this is the tree section).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ mafft pdm.fna | FastTree -nt -gamma -gtr &gt; pdm.tre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will take awhile to run, since there are nearly 27 thousand strains. The
+result tree is shown <a href="#fig:tree1">below</a>.</p>
+</div>
+<div id="fig:tree1" class="paragraph">
+<p><span class="image"><img src="images/tree1.png" alt="tree1"></span></p>
+</div>
+<div class="paragraph">
+<p>We want to root it on California/07/2009 and then sort it. This can be done
+with the <code>treebender</code> utility from the phylommand package
+(<a href="https://github.com/RybergGroup/phylommand" class="bare">https://github.com/RybergGroup/phylommand</a>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ treebender --outgroup_root "vaccine|A/California/07/2009|human" pdm.tre | treebender --ladderize &gt; pdm2.tre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The outgroup name needs to be an exact match against the tip label. The result is much cleaner:</p>
+</div>
+<div id="fig:tree2" class="paragraph">
+<p><span class="image"><img src="images/tree2.png" alt="tree2"></span></p>
+</div>
+<div class="paragraph">
+<p>But this tree is far too large for our purposes. We need to subsample. However,
+since we are interested in human-swine transmission, we need to preserve the
+overall topology of the tree with respect to the two species. If we just
+sampled 5% of the tips, we would loose most of the non-persisting spill-over
+cases. <code>smot</code> can sample for us while preserving the topology.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>smot sample para --keep "swine" --seed 42 -p 0.02 --min-tips=3 --factor-by-capture="(human|swine)" pdm2.tre &gt; pdm3.tre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This yields a much more manageable tree with only 2643 tips. The black and
+orange represent human and swine sequences, respectively.</p>
+</div>
+<div id="fig:tree3" class="paragraph">
+<p><span class="image"><img src="images/tree3.png" alt="tree3"></span></p>
+</div>
+<div class="paragraph">
+<p>If you just want to see the swine, <code>smot</code> can grep them out:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>smot grep "swine" pdm3.tre &gt; pdm-swine.tre</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you want to remove the private VDL sequences:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>smot grep -v "VDL" pdm3.tre &gt; pdm-no-vdl.tre</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <h1 id="_methods_for_working_with_sequence_data" class="sect0">Methods for working with sequence data</h1>
@@ -1311,6 +1497,87 @@ references from [<a href="#burke2014">2</a>] (summarized in table below).</p>
 </li>
 </ul>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Annotation sets</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">subtype</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">reference</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flag</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[<a href="#canton1982">3</a>]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--caton1982</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">antigenic sites</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[<a href="#wiley1981">4</a>]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>--wiley1981</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">antigenic sites</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_flutile_and_indexing">5.3. <code>flutile</code> and indexing</h3>
+<div class="paragraph">
+<p>The reference strains selected by [<a href="#burke2014">2</a>] may be used for indexing HA,
+but no comparable study has been done for NA or the internal genes.</p>
+</div>
+<div class="paragraph">
+<p>Indels are rather rare in the internal genes (with the interesting exception of
+NS), so the genes are covered well with a single reference.  I chose the H1N1
+A/Puerto_Rico/8/1934 (EPI_ISL_146807) for this role since it 1) has a complete
+genome sequence with no ambiguous residues and 2) has been the subject of
+extensive structural research.</p>
+</div>
+<div class="paragraph">
+<p>I retrieved all available public WGS data including around 70000 to
+80000 sequences for each internal gene. For each segment (other than NS)
+the 1st, 2nd and 3rd quantiles were all equal (indicating at least 50%
+of the strains in each group are of exactly the same length). The
+lengths of the translated A/Puerto_Rico/8/1934 segments exactly matched
+these quantiles. For NS, the translated product matched the 2nd quantile
+value (the median).</p>
+</div>
+<div class="paragraph">
+<p>So overall, while A/Puerto_Rico/8/1934 may be very different in sequence from
+modern strains, it will work fine as an index reference.</p>
+</div>
+<div class="paragraph">
+<p>The NA&#8217;s are a bit more complicated. The NA length varies dramatically even
+within subtypes, particularly with variation in length of the stalk-motif
+[<a href="#zhou2009special">5</a>, <a href="#castrucci1993biologic">6</a>].</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_flutile_and_motif_extraction">5.4. <code>flutile</code> and motif extraction</h3>
+<div class="paragraph">
+<p><code>flutile</code> can also use these subtype reference to extract HA motifs relative to
+Burke2014 numbering.</p>
+</div>
+<div class="paragraph">
+<p>For example, to exact the classical H1 antigenic motifs:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>flutile trim motif --conversion=dna2aa --subtype=H1 \
+  -m "Sa=124-125,153-157,159-164" \
+  -m "Sb=184-195" \
+  -m "Ca1=166-170,203-205,235-237" \
+  -m "Ca2=137-142,221-222" \
+  -m "Cb=70-75" myseqs.fna</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1377,85 +1644,26 @@ Add important papers and short summaries
 <div class="paragraph">
 <p><a id="burke2014"></a>[2] D. F. Burke &amp; D. J. Smith, A recommended numbering scheme for influenza A HA subtypes. <em>PloS one</em>, <strong>9</strong> (2014) e112302.</p>
 </div>
+<div class="paragraph">
+<p><a id="canton1982"></a>[3] A. J. Canton, The antigenic structure of the influenza virus A/PR/8/34 hemagglutinin (H1 subtype). <em>Cell</em>, <strong>31</strong> (1982) 417–427.</p>
+</div>
+<div class="paragraph">
+<p><a id="wiley1981"></a>[4] D. C. Wiley, I. A. Wilson, &amp; J. J. Skehel, Structural identification of the antibody-binding sites of Hong Kong influenza haemagglutinin and their involvement in antigenic variation. <em>Nature</em>, <strong>289</strong> (1981) 373–378.</p>
+</div>
+<div class="paragraph">
+<p><a id="zhou2009special"></a>[5] H. Zhou, Z. Yu, Y. Hu, J. Tu, W. Zou, Y. Peng, J. Zhu, Y. Li, A. Zhang, Z. Yu, &amp; others, The special neuraminidase stalk-motif responsible for increased virulence and pathogenesis of H5N1 influenza A virus. <em>PloS one</em>, <strong>4</strong> (2009) e6277.</p>
+</div>
+<div class="paragraph">
+<p><a id="castrucci1993biologic"></a>[6] M. R. Castrucci &amp; Y. O. S. H. I. H. I. R. O. Kawaoka, Biologic importance of neuraminidase stalk length in influenza A virus. <em>Journal of virology</em>, <strong>67</strong> (1993) 759–764.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-24 19:00:48 -0500
+Last updated 2021-04-14 15:20:34 -0500
 </div>
 </div>
-<style>
-pre.pygments .hll { background-color: #ffffcc }
-pre.pygments  { background: #f8f8f8; }
-pre.pygments .tok-c { color: #008800; font-style: italic } /* Comment */
-pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
-pre.pygments .tok-k { color: #AA22FF; font-weight: bold } /* Keyword */
-pre.pygments .tok-o { color: #666666 } /* Operator */
-pre.pygments .tok-ch { color: #008800; font-style: italic } /* Comment.Hashbang */
-pre.pygments .tok-cm { color: #008800; font-style: italic } /* Comment.Multiline */
-pre.pygments .tok-cp { color: #008800 } /* Comment.Preproc */
-pre.pygments .tok-cpf { color: #008800; font-style: italic } /* Comment.PreprocFile */
-pre.pygments .tok-c1 { color: #008800; font-style: italic } /* Comment.Single */
-pre.pygments .tok-cs { color: #008800; font-weight: bold } /* Comment.Special */
-pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
-pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
-pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
-pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
-pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
-pre.pygments .tok-go { color: #888888 } /* Generic.Output */
-pre.pygments .tok-gp { color: #000080; font-weight: bold } /* Generic.Prompt */
-pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
-pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
-pre.pygments .tok-kc { color: #AA22FF; font-weight: bold } /* Keyword.Constant */
-pre.pygments .tok-kd { color: #AA22FF; font-weight: bold } /* Keyword.Declaration */
-pre.pygments .tok-kn { color: #AA22FF; font-weight: bold } /* Keyword.Namespace */
-pre.pygments .tok-kp { color: #AA22FF } /* Keyword.Pseudo */
-pre.pygments .tok-kr { color: #AA22FF; font-weight: bold } /* Keyword.Reserved */
-pre.pygments .tok-kt { color: #00BB00; font-weight: bold } /* Keyword.Type */
-pre.pygments .tok-m { color: #666666 } /* Literal.Number */
-pre.pygments .tok-s { color: #BB4444 } /* Literal.String */
-pre.pygments .tok-na { color: #BB4444 } /* Name.Attribute */
-pre.pygments .tok-nb { color: #AA22FF } /* Name.Builtin */
-pre.pygments .tok-nc { color: #0000FF } /* Name.Class */
-pre.pygments .tok-no { color: #880000 } /* Name.Constant */
-pre.pygments .tok-nd { color: #AA22FF } /* Name.Decorator */
-pre.pygments .tok-ni { color: #999999; font-weight: bold } /* Name.Entity */
-pre.pygments .tok-ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-pre.pygments .tok-nf { color: #00A000 } /* Name.Function */
-pre.pygments .tok-nl { color: #A0A000 } /* Name.Label */
-pre.pygments .tok-nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
-pre.pygments .tok-nt { color: #008000; font-weight: bold } /* Name.Tag */
-pre.pygments .tok-nv { color: #B8860B } /* Name.Variable */
-pre.pygments .tok-ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
-pre.pygments .tok-mb { color: #666666 } /* Literal.Number.Bin */
-pre.pygments .tok-mf { color: #666666 } /* Literal.Number.Float */
-pre.pygments .tok-mh { color: #666666 } /* Literal.Number.Hex */
-pre.pygments .tok-mi { color: #666666 } /* Literal.Number.Integer */
-pre.pygments .tok-mo { color: #666666 } /* Literal.Number.Oct */
-pre.pygments .tok-sa { color: #BB4444 } /* Literal.String.Affix */
-pre.pygments .tok-sb { color: #BB4444 } /* Literal.String.Backtick */
-pre.pygments .tok-sc { color: #BB4444 } /* Literal.String.Char */
-pre.pygments .tok-dl { color: #BB4444 } /* Literal.String.Delimiter */
-pre.pygments .tok-sd { color: #BB4444; font-style: italic } /* Literal.String.Doc */
-pre.pygments .tok-s2 { color: #BB4444 } /* Literal.String.Double */
-pre.pygments .tok-se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
-pre.pygments .tok-sh { color: #BB4444 } /* Literal.String.Heredoc */
-pre.pygments .tok-si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
-pre.pygments .tok-sx { color: #008000 } /* Literal.String.Other */
-pre.pygments .tok-sr { color: #BB6688 } /* Literal.String.Regex */
-pre.pygments .tok-s1 { color: #BB4444 } /* Literal.String.Single */
-pre.pygments .tok-ss { color: #B8860B } /* Literal.String.Symbol */
-pre.pygments .tok-bp { color: #AA22FF } /* Name.Builtin.Pseudo */
-pre.pygments .tok-fm { color: #00A000 } /* Name.Function.Magic */
-pre.pygments .tok-vc { color: #B8860B } /* Name.Variable.Class */
-pre.pygments .tok-vg { color: #B8860B } /* Name.Variable.Global */
-pre.pygments .tok-vi { color: #B8860B } /* Name.Variable.Instance */
-pre.pygments .tok-vm { color: #B8860B } /* Name.Variable.Magic */
-pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
-</style>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
   messageStyle: "none",
@@ -1472,13 +1680,13 @@ MathJax.Hub.Config({
 })
 MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
   MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
-    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains('stemblock')) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
       data.math.root.display = "block"
     }
     return data
   })
 })
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>
